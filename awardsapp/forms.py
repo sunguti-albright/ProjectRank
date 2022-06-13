@@ -1,21 +1,15 @@
+from .models import Profile,Post
 from django import forms
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from .models import Profile
 
-
-
-class SignUpForm(UserCreationForm):
-    username = forms.CharField(max_length=50)
-    email = forms.CharField(max_length=60)
+class ProfileModelForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ('username','email','password1','password2')
+        model = Profile
+        fields = ['username','bio','avatar']
 
-class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField()
+class PostModelForm(forms.ModelForm):
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows':3} ))
+    location = forms.CharField(label = 'Your location')
 
     class Meta:
-        model = User
-        fields = ['username','email']
-
+        model = Post
+        fields = ['project_name','description','url','image','location',]     
