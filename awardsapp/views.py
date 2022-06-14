@@ -111,3 +111,18 @@ def update_project(request,pk):
             return redirect('review',pk = pk )
    
     return render(request, 'awards/update_project.html',{'form' :form})
+
+
+class ProjectList(APIView):
+    def get(self, request, format=None):
+        allprojects = Post.objects.all()
+        serializers = PostSerializer(allprojects, many=True)
+        return Response(serializers.data)
+    permission_classes = (IsAdminOrReadOnly,)
+
+    def post(self, request, format=None):
+        serializers = PostSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
