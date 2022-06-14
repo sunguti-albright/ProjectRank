@@ -72,3 +72,19 @@ def reviewPhoto(request,pk):
 
     return render(request,'awards/review.html',context)
     
+def search_results(request):
+
+    if 'project' in request.GET and request.GET["project"]:
+        search_term = request.GET.get("project")
+        searched_articles = Post.search_by_project_name(search_term)
+        message = f"{search_term}"
+        context = {"message":message,
+        "projects": searched_articles}
+
+        return render(request, 'awards/search.html',context)
+    else:
+        message = "no projects found"
+        context = {
+            'message':message
+        }
+        return render(request, 'awards/home.html',context)  
