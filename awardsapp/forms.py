@@ -1,4 +1,4 @@
-from .models import Profile,Post
+from .models import Profile,Post, Review, RATE_CHOICES
 from django import forms
 
 class ProfileModelForm(forms.ModelForm):
@@ -12,4 +12,13 @@ class PostModelForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['project_name','description','url','image','location',]     
+        fields = ['project_name','description','url','image','location',]  
+
+class RateForm(forms.ModelForm):
+    design = forms.ChoiceField(choices=RATE_CHOICES, widget=forms.Select(), required=True)
+    usability = forms.ChoiceField(choices=RATE_CHOICES, widget=forms.Select(), required=True)
+    content = forms.ChoiceField(choices=RATE_CHOICES, widget=forms.Select(), required=True)
+    
+    class Meta:
+        model = Review
+        fields=['design','usability','content','comment'] 

@@ -16,10 +16,6 @@
 
                 <p class="my-3">{{post.description}}</p>
             </div>
-            <div class="col-md">
-                <h1>Ratings</h1>
-                {% ratings post %}
-              </div>
             <div class="content">
                 {% if request.user == post.author %}            
 
@@ -34,9 +30,23 @@
               
 
             </div>
+            <div class="col-lg-8 col-md-6 col-sm-12">
+            <div class="mt-5">
+                <form action="{% url 'rate_project' post.id%}" method="post" enctype="multipart/form-data"
+                    class="choice-form">
+                    <h5>RATE THIS SITE</h5>
+                    {% csrf_token%}
+                    {% bootstrap_form form %}
+                    <div class="form-group  text-center">
+                        <input type="submit" class="m-4 btn btn-primary login-btn" value="RATE">
+                    </div>
+                    <input type="hidden" name="next" value="{{next}}">
+                </form>
+            </div>
     
 
         </div>
+        
     </div>
 </div>
 {%endblock%}

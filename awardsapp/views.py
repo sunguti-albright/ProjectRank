@@ -1,12 +1,15 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
+from requests import post
 from awardsapp.models import Profile,Post
 from awardsapp.forms import ProfileModelForm,PostModelForm
 from django.contrib.auth.decorators import login_required
 import datetime as dt
 from django.shortcuts import render, redirect
+
 from django.contrib import messages
 from .forms import *
 from .models import *
+from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializer import *
@@ -64,14 +67,45 @@ def home(request):
 @login_required(login_url='/accounts/login/')
 def reviewPhoto(request,pk):
     post = Post.objects.get(id = pk)
-    context = {
-        'post':post
-
-    }
-
-
-    return render(request,'awards/review.html',context)
     
+    reviews = Review.objects.all().filter(id = pk)
+    form = RateForm(request.POST)
+    if request.method == 'POST':
+        
+        if form.is_valid():
+            rate = form.save(commit=False)
+            rate.author = request.user
+            rate.post = post
+            rate.save()
+            return redirect('review')
+    else:
+        form = RateForm()    
+    
+    context = {
+        'post':post,
+        'form':form,
+       'reviews':reviews,
+    }
+    return render(request,'awards/review.html',context)
+@login_required
+def rate_project(request, id):
+    form=RateForm()
+    project = Post.objects.get(id=id)
+    user = request.user
+    # reviews = Rate.objects.all().filter(project_id=pk)
+    if request.method == 'POST':
+        form = RateForm(request.POST)
+        if form.is_valid():
+         
+            rate = form.save(commit=False)
+            rate.user = user
+            rate.project = project
+            rate.save()
+            return redirect('home')
+        
+    else:
+        form= RateForm()  
+
 def search_results(request):
 
     if 'project' in request.GET and request.GET["project"]:

@@ -14,7 +14,8 @@ urlpatterns = [
     path('search/',search_results, name ='search_results'),
     path('delete/<int:pk>',delete_project, name = 'deletepost'), 
     path('update/<str:pk>',update_project, name = 'updatepost'), 
-    re_path(r'ratings/', include('star_ratings.urls', namespace='ratings')),
+    path('rate/<int:id>/',views.rate_project,name='rate_project'),
+    re_path(r'ratings/<int:id>/', include('star_ratings.urls', namespace='ratings')),
     re_path(r'^api/profile/$', views.ProfileList.as_view()),
     re_path(r'^api/project/$', views.ProjectList.as_view()),
 ]

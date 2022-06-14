@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Profile,Post
+from .models import Profile,Post, Review
 from django.contrib.auth.models import User
 
 # Create your tests here.
@@ -48,3 +48,13 @@ class PhotoTestClass(TestCase):
         def test_get_project_by_id(self):
             id = Post.get_project_by_id()
             self.assertTrue(len(id) == 0)    
+
+
+class ReviewTestCases(TestCase):
+    def setUp(self):      
+        self.new_review = Review(id=1,user='Jid',project='Instagram',design='1',usability='1',content='1',overall='1',comment='comment')
+        self.new_review.save_review()
+        
+    def test_is_instance(self):
+        self.assertTrue(isinstance(self.new_review,Review))
+                

@@ -50,3 +50,23 @@ class Post(models.Model):
         ordering = ['-created'] 
 
 #product review model
+RATE_CHOICES = [
+	(1,'1 - Unsatisfactory'),
+	(2,'2 - Pathetic'),
+	(3,'3 - Very bad'),
+	(4,'4 - Bad'),
+	(5,'5 - Average'),
+	(6,'6 - Okay'),
+	(7,'7 - Good'),
+	(8,'8 - Very Good'),
+	(9,'9 - Excellent'),
+	(10, '10 - Perfect'), 
+]
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(Post, on_delete = models.CASCADE)
+    design = models.PositiveSmallIntegerField(choices=RATE_CHOICES, default=5) 
+    usability =models.PositiveSmallIntegerField(choices=RATE_CHOICES, default=5)  
+    content = models.PositiveSmallIntegerField(choices=RATE_CHOICES, default=5)
+    comment = models.CharField(max_length=250, blank=True,default='')  
+    overall = models.IntegerField(blank=True,default=0)   
