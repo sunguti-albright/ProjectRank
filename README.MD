@@ -5,6 +5,10 @@
 
 * Link to live site: [Awards](https://albrightawards.herokuapp.com/)
 
+* Link to user profile JSON response: [PROFILES](https://albrightawards.herokuapp.com/api/profile)
+
+* Link to projects JSON response : [PROJECTS](https://albrightawards.herokuapp.com/api/projects)
+
 ## Description
 An application where users can sign in, post their projects and have them rated by other users
   
