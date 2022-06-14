@@ -1,30 +1,51 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
-from django.db.models.signals import post_save
-from django.dispatch  import receiver
-from django.http import Http404
-from django.core.exceptions import ObjectDoesNotExist
-# Create your models here.
+from django.core.validators import FileExtensionValidator
 
+# Create your models here.
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default='')
-    image = models.ImageField(default='', upload_to='images/')
-    bio = models.CharField(max_length=255, blank=True, default='')
+    username = models.CharField(max_length = 255,blank=True)
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    bio = models.TextField(default='no bio',max_length=300)
+    avatar = models.ImageField(default='avatar.jpg',upload_to = 'avatars/')
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return f'{self.user.username}-{self.created}'
+
+class Post(models.Model):
+    project_name = models.CharField(max_length = 255)
+    description = models.TextField()
+    url = models.URLField(unique=True)
+    image = models.ImageField(upload_to = 'posts',validators = [FileExtensionValidator(['png','jpg','jpeg'])])
+    location = models.CharField(max_length = 255)
+    created = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(User,on_delete=models.CASCADE,related_name='posts')
+
+    def __str__(self):
+        return str(self.description[:20])
+
+    def save_project(self):
+        self.save() 
+
+    def delete_project(self):
+        self.delete()  
+
+    def  update_project(self):
+        self.save()  
+
+    @classmethod
+    def get_project_by_id(cls,id=None):
+        photos = cls.objects.filter(id = id)   
+        return photos     
+        
+    @classmethod
+    def search_by_project_name(cls,search_term):
+        project = cls.objects.filter(project_name__icontains = search_term)   
+        # We filter the model data using the __icontains query filter
+        return project     
 
     class Meta:
-        db_table = 'profile'
-
-    @receiver(post_save, sender=User)
-    def update_create_profile(sender,instance,created, **kwargs):
-        try:
-            instance.profile.save()
-        except ObjectDoesNotExist:
-            Profile.objects.create(user=instance)
+        ordering = ['-created'] 
 
 
-    def save_profile(self):
-        self.save()
