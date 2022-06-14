@@ -6,10 +6,10 @@ from awardsapp.models import Post,Profile
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ('id','project_name','description','author')
+        fields = ('id','project_name','description','url','image','author')
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('id','username','bio')
+        fields = ('id','username','bio','contact','avatar')

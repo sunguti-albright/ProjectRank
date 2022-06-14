@@ -7,6 +7,7 @@ class Profile(models.Model):
     username = models.CharField(max_length = 255,blank=True)
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     bio = models.TextField(default='no bio',max_length=300)
+    contact = models.IntegerField(default=0)
     avatar = models.ImageField(default='avatar.jpg',upload_to = 'avatars/')
     created = models.DateTimeField(auto_now_add=True)
 
@@ -48,4 +49,4 @@ class Post(models.Model):
     class Meta:
         ordering = ['-created'] 
 
-
+#product review model

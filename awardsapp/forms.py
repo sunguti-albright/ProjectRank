@@ -4,7 +4,7 @@ from django import forms
 class ProfileModelForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['username','bio','avatar']
+        fields = ['username','bio','contact','avatar']
 
 class PostModelForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={'rows':3} ))
