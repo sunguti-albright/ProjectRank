@@ -88,3 +88,26 @@ def search_results(request):
             'message':message
         }
         return render(request, 'awards/home.html',context)  
+
+
+def delete_project(request,pk): 
+    post = Post.objects.get(pk = pk)
+    if request.method == 'POST':
+        post.delete()
+
+        return redirect('home')
+
+    return render(request, 'awards/delete_project.html',{})        
+
+
+def update_project(request,pk):
+    post = Post.objects.get(id = pk)
+    form = PostModelForm(instance = post)
+    if request.method == 'POST':
+        form = PostModelForm(request.POST, request.FILES ,instance = post)
+        # We pass in the request.FILES argument because we are going to be uploading an Image file and we want to process that in our form.
+        if form.is_valid():
+            post.save()
+            return redirect('review',pk = pk )
+   
+    return render(request, 'awards/update_project.html',{'form' :form})
