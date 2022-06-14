@@ -126,3 +126,19 @@ class ProjectList(APIView):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class ProfileList(APIView):
+    def get(self, request, format=None):
+        allprofiles = Profile.objects.all()
+        serializers = ProfileSerializer(allprofiles, many=True)
+        return Response(serializers.data)
+    permission_classes = (IsAdminOrReadOnly,)
+
+    def post(self, request, format=None):
+        serializers = ProfileSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
